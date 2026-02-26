@@ -38,7 +38,7 @@ export default function TradeTable({ trades, regionCode, showAptLink = true }: {
 
   return (
     <div className="card overflow-x-auto">
-      <h3 className="font-semibold text-gray-900 mb-4">실거래 내역 ({trades.length}건)</h3>
+      <h3 className="font-bold text-gray-900 mb-4">실거래 내역 ({trades.length}건)</h3>
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gray-100 text-gray-500">
@@ -52,7 +52,7 @@ export default function TradeTable({ trades, regionCode, showAptLink = true }: {
         </thead>
         <tbody>
           {sorted.map((t, i) => (
-            <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/80 transition-colors duration-150">
+            <tr key={`${t.date}-${t.apartment}-${t.floor}-${i}`} className="border-b border-gray-50 hover:bg-indigo-50/30 transition-colors duration-150">
               <td className="py-2.5 text-gray-500 num">{t.date}</td>
               <td className="py-2.5">
                 {showAptLink ? (

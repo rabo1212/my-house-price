@@ -22,7 +22,7 @@ export default function CashFlowAnalysis({ price, ltv, rate, years, monthlyRent 
   }, [price, ltv, rate, years, monthlyRent]);
 
   const Stat = ({ label, value, sub, accent }: { label: string; value: string; sub: string; accent?: string }) => (
-    <div className="bg-gray-50 rounded-lg p-3 text-center">
+    <div className="rounded-xl p-3 text-center" style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5f9)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 3px rgba(0,0,0,0.04)' }}>
       <div className="text-xs text-gray-500 mb-1">{label}</div>
       <div className={`font-bold num ${accent || 'text-gray-900'}`}>{value}</div>
       <div className="text-xs text-gray-400 mt-1">{sub}</div>
@@ -31,7 +31,7 @@ export default function CashFlowAnalysis({ price, ltv, rate, years, monthlyRent 
 
   return (
     <div className="card">
-      <h3 className="font-semibold text-gray-900 mb-4">자금 분석</h3>
+      <h3 className="font-bold text-gray-900 mb-4">자금 분석</h3>
       <div className="grid grid-cols-2 gap-3 mb-4">
         <Stat label="초기 필요자금" value={formatPrice(a.initialCost)} sub="자기자본 + 취득세" />
         <Stat label="월 상환금" value={`${a.monthlyManwon}만원`} sub="원리금균등상환" accent="text-indigo-700" />
@@ -41,9 +41,9 @@ export default function CashFlowAnalysis({ price, ltv, rate, years, monthlyRent 
 
       <div className="mb-4">
         <div className="text-xs text-gray-500 mb-2">자금 구성</div>
-        <div className="h-3 rounded-full overflow-hidden flex bg-gray-100">
-          <div className="bg-indigo-400 h-full rounded-l-full" style={{ width: `${(a.selfFund / price) * 100}%` }} />
-          <div className="bg-indigo-600 h-full rounded-r-full" style={{ width: `${(a.loan / price) * 100}%` }} />
+        <div className="h-4 rounded-full overflow-hidden flex" style={{ background: 'linear-gradient(135deg, #e5e7eb, #d1d5db)', boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)' }}>
+          <div className="h-full rounded-l-full" style={{ width: `${(a.selfFund / price) * 100}%`, background: 'linear-gradient(135deg, #a5b4fc, #818cf8)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }} />
+          <div className="h-full rounded-r-full" style={{ width: `${(a.loan / price) * 100}%`, background: 'linear-gradient(135deg, #6366f1, #4f46e5)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)' }} />
         </div>
         <div className="flex justify-between text-xs mt-1.5">
           <span className="text-indigo-500">자기자본 {formatPrice(a.selfFund)} ({Math.round((1 - ltv / 100) * 100)}%)</span>
@@ -52,7 +52,7 @@ export default function CashFlowAnalysis({ price, ltv, rate, years, monthlyRent 
       </div>
 
       {monthlyRent > 0 && (
-        <div className={`rounded-xl p-3 ${a.monthlyCashFlow >= 0 ? 'bg-emerald-50' : 'bg-rose-50'}`}>
+        <div className={`rounded-xl p-3 border ${a.monthlyCashFlow >= 0 ? 'border-emerald-200/60' : 'border-rose-200/60'}`} style={{ background: a.monthlyCashFlow >= 0 ? 'linear-gradient(135deg, #ecfdf5, #d1fae5)' : 'linear-gradient(135deg, #fff1f2, #ffe4e6)', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">월 캐시플로우</span>
             <span className={`font-bold num ${a.monthlyCashFlow >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>

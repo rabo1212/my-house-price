@@ -77,3 +77,23 @@ export async function fetchMultiMonthTrades(lawdCd: string, months: number = 6):
   }
   return all;
 }
+
+/** 동시 호출 수를 제한하면서 Promise 배열 실행 */
+export async function runWithConcurrency<T>(
+  tasks: (() => Promise<T>)[],
+  concurrency: number,
+): Promise<T[]> {
+  const results: T[] = new Array(tasks.length);
+  let idx = 0;
+
+  async function worker() {
+    while (idx < tasks.length) {
+      const i = idx++;
+      results[i] = await tasks[i]();
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(concurrency, tasks.length) }, () => worker());
+  await Promise.all(workers);
+  return results;
+}

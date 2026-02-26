@@ -6,7 +6,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   let code = searchParams.get('code') || '';
   const apt = searchParams.get('apt') || '';
-  const months = parseInt(searchParams.get('months') || '6');
+  const rawMonths = parseInt(searchParams.get('months') || '6');
+  const months = Math.min(Math.max(isNaN(rawMonths) ? 6 : rawMonths, 1), 12);
 
   // 이름으로도 검색 가능
   if (!code && searchParams.get('region')) {

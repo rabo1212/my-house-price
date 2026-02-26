@@ -25,19 +25,19 @@ export default function PriceChart({ trades, title = '월별 평균 거래가' }
 
   return (
     <div className="card">
-      <h3 className="font-semibold text-gray-900 mb-4">{title}</h3>
+      <h3 className="font-bold text-gray-900 mb-4">{title}</h3>
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9ca3af' }} tickFormatter={v => v.slice(5) + '월'} />
           <YAxis tick={{ fontSize: 12, fill: '#9ca3af' }} tickFormatter={v => formatPrice(v)} width={80} />
           <Tooltip
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(v: any) => [formatPrice(v as number), '평균가']}
             labelFormatter={l => `${l}`}
-            contentStyle={{ borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '13px' }}
+            contentStyle={{ borderRadius: '14px', border: '1px solid rgba(255,255,255,0.8)', fontSize: '13px', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}
           />
-          <Line type="monotone" dataKey="avg" stroke="#6366f1" strokeWidth={2.5} dot={{ fill: '#6366f1', r: 4, strokeWidth: 0 }} activeDot={{ r: 6, fill: '#818cf8' }} />
+          <Line type="monotone" dataKey="avg" stroke="#6366f1" strokeWidth={2.5} dot={{ fill: '#6366f1', r: 4, strokeWidth: 0 }} activeDot={{ r: 6, fill: '#818cf8', stroke: '#6366f1', strokeWidth: 2 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
