@@ -153,7 +153,7 @@ export default function TrendPage() {
       </div>
 
       {/* 검색 + 선택된 아이템 */}
-      <div className="card">
+      <div className="card relative z-20">
         <div className="relative" ref={dropdownRef}>
           {selectedRegion && (
             <div className="flex items-center gap-2 mb-2">
