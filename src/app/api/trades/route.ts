@@ -17,7 +17,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid region code' }, { status: 400 });
   }
 
+  const hasKey = !!process.env.MOLIT_API_KEY;
+  console.log(`[trades] code=${code}, months=${months}, hasKey=${hasKey}`);
   const trades = await fetchMultiMonthTrades(code, Math.min(months, 12));
+  console.log(`[trades] fetched ${trades.length} trades`);
   const filtered = apt ? trades.filter(t => t.apartment.includes(apt)) : trades;
 
   // 통계
