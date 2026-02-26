@@ -11,6 +11,7 @@ export default function CalculatorPage() {
   const [rate] = useState(3.5);
   const [years] = useState(30);
   const [rent, setRent] = useState(0);
+  const [rentText, setRentText] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -33,8 +34,19 @@ export default function CalculatorPage() {
                 <span className="text-sm text-gray-600">월세 수입</span>
                 <div className="flex items-center gap-1">
                   <input
-                    type="number" min={0} max={500} step={1} value={rent}
-                    onChange={e => { const v = parseInt(e.target.value); if (!isNaN(v)) setRent(Math.min(500, Math.max(0, v))); }}
+                    type="number" min={0} max={500} step={1}
+                    value={rentText !== null ? rentText : rent}
+                    onFocus={() => setRentText(String(rent))}
+                    onChange={e => {
+                      setRentText(e.target.value);
+                      const v = parseInt(e.target.value);
+                      if (!isNaN(v)) setRent(Math.min(500, Math.max(0, v)));
+                    }}
+                    onBlur={() => {
+                      const v = parseInt(rentText || '');
+                      if (!isNaN(v)) setRent(Math.min(500, Math.max(0, v)));
+                      setRentText(null);
+                    }}
                     className="w-24 text-right text-sm font-semibold num text-gray-900 border border-white/80 rounded-xl px-2 py-1 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                     style={{ background: 'rgba(255,255,255,0.6)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
                   />

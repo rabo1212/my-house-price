@@ -4,6 +4,45 @@ import { useState, useMemo } from 'react';
 import { calculateMonthlyPayment, calculateAcquisitionTax } from '@/lib/mortgage-calc';
 import { formatPrice } from '@/lib/price-utils';
 
+function NumSlider({ label, value, min, max, step, unit, displayValue, inputStep, onChange }: {
+  label: string; value: number; min: number; max: number; step: number;
+  unit: string; displayValue: string; inputStep?: number;
+  onChange: (v: number) => void;
+}) {
+  const [text, setText] = useState<string | null>(null);
+  const clamp = (v: number) => Math.min(max, Math.max(min, v));
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm text-gray-600">{label}</span>
+        <div className="flex items-center gap-1">
+          <input
+            type="number"
+            min={min} max={max} step={inputStep || step}
+            value={text !== null ? text : displayValue}
+            onFocus={() => setText(displayValue)}
+            onChange={e => {
+              setText(e.target.value);
+              const v = parseFloat(e.target.value);
+              if (!isNaN(v)) onChange(clamp(v));
+            }}
+            onBlur={() => {
+              const v = parseFloat(text || '');
+              if (!isNaN(v)) onChange(clamp(v));
+              setText(null);
+            }}
+            className="w-24 text-right text-sm font-semibold num text-gray-900 border border-white/80 rounded-xl px-2 py-1 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+            style={{ background: 'rgba(255,255,255,0.6)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+          />
+          <span className="text-sm text-gray-500 w-6">{unit}</span>
+        </div>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full" />
+    </div>
+  );
+}
+
 export default function MortgageCalculator({ initialPrice = 0 }: { initialPrice?: number }) {
   const [price, setPrice] = useState(initialPrice || 90000);
   const [ltv, setLtv] = useState(70);
@@ -15,43 +54,13 @@ export default function MortgageCalculator({ initialPrice = 0 }: { initialPrice?
   const tax = useMemo(() => calculateAcquisitionTax(price), [price]);
   const selfFund = price - loan;
 
-  const Slider = ({ label, value, min, max, step, unit, inputValue, inputStep, onChange }: {
-    label: string; value: number; min: number; max: number; step: number;
-    unit: string; inputValue: string; inputStep?: number;
-    onChange: (v: number) => void;
-  }) => {
-    const clamp = (v: number) => Math.min(max, Math.max(min, v));
-    return (
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-600">{label}</span>
-          <div className="flex items-center gap-1">
-            <input
-              type="number"
-              min={min} max={max} step={inputStep || step}
-              value={inputValue}
-              onChange={e => {
-                const v = parseFloat(e.target.value);
-                if (!isNaN(v)) onChange(clamp(v));
-              }}
-              className="w-24 text-right text-sm font-semibold num text-gray-900 border border-white/80 rounded-xl px-2 py-1 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-              style={{ background: 'rgba(255,255,255,0.6)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
-            />
-            <span className="text-sm text-gray-500 w-6">{unit}</span>
-          </div>
-        </div>
-        <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full" />
-      </div>
-    );
-  };
-
   return (
     <div className="card space-y-5">
       <h3 className="font-bold text-gray-900">대출 계산기</h3>
-      <Slider label="매매가 (만원)" value={price} min={5000} max={300000} step={1000} inputStep={100} unit="" inputValue={String(price)} onChange={setPrice} />
-      <Slider label="LTV (대출비율)" value={ltv} min={0} max={90} step={5} inputStep={1} unit="%" inputValue={String(ltv)} onChange={setLtv} />
-      <Slider label="금리" value={rate} min={1} max={10} step={0.1} inputStep={0.1} unit="%" inputValue={rate.toFixed(1)} onChange={v => setRate(Math.round(v * 10) / 10)} />
-      <Slider label="대출기간" value={years} min={5} max={40} step={5} inputStep={1} unit="년" inputValue={String(years)} onChange={setYears} />
+      <NumSlider label="매매가 (만원)" value={price} min={5000} max={300000} step={1000} inputStep={100} unit="" displayValue={String(price)} onChange={setPrice} />
+      <NumSlider label="LTV (대출비율)" value={ltv} min={0} max={90} step={5} inputStep={1} unit="%" displayValue={String(ltv)} onChange={setLtv} />
+      <NumSlider label="금리" value={rate} min={1} max={10} step={0.1} inputStep={0.1} unit="%" displayValue={rate.toFixed(1)} onChange={v => setRate(Math.round(v * 10) / 10)} />
+      <NumSlider label="대출기간" value={years} min={5} max={40} step={5} inputStep={1} unit="년" displayValue={String(years)} onChange={setYears} />
 
       <div className="rounded-xl p-4 space-y-3" style={{ background: 'linear-gradient(135deg, #eef2ff, #e0e7ff)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 8px rgba(99,102,241,0.06)' }}>
         <div className="flex justify-between text-sm">
