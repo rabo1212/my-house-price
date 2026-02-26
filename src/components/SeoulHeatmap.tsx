@@ -13,22 +13,6 @@ interface Props {
   regions: RegionData[];
 }
 
-// 서울 25개 구 그리드 배치 (대략적 지리 위치 반영)
-const SEOUL_GRID: Record<string, [number, number]> = {
-  '11350': [0, 3], '11320': [0, 2], '11305': [1, 2], '11290': [1, 3],
-  '11380': [1, 0], '11230': [1, 4], '11260': [1, 5], '11410': [2, 0],
-  '11110': [2, 1], '11140': [2, 2], '11200': [2, 3], '11215': [2, 4],
-  '11440': [3, 0], '11170': [3, 1], '11590': [3, 2], '11650': [3, 3],
-  '11680': [3, 4], '11710': [3, 5], '11500': [4, 0], '11470': [4, 1],
-  '11560': [4, 2], '11530': [5, 1], '11620': [5, 2], '11545': [5, 0],
-  '11740': [4, 5],
-};
-
-const GYEONGGI_GRID: Record<string, [number, number]> = {
-  '41285': [0, 0], '41117': [0, 1], '41135': [0, 2],
-  '41465': [1, 0], '41461': [1, 1], '41173': [1, 2],
-};
-
 const COLOR_STOPS = [
   { bg: 'linear-gradient(135deg, #e0e7ff, #ede9fe)', text: 'text-gray-700', sub: 'text-gray-500' },
   { bg: 'linear-gradient(135deg, #c7d2fe, #ddd6fe)', text: 'text-gray-700', sub: 'text-gray-500' },
@@ -51,6 +35,8 @@ function getColorIndex(value: number, min: number, max: number): number {
 function GridCell({ region, min, max, onClick }: { region: RegionData; min: number; max: number; onClick: () => void }) {
   const ci = getColorIndex(region.avgPricePerPyeong, min, max);
   const color = COLOR_STOPS[ci];
+  // 짧은 이름 표시 (시/도 prefix 제거)
+  const shortName = region.name.includes(' ') ? region.name.split(' ').slice(1).join(' ') : region.name;
 
   return (
     <button
@@ -73,7 +59,7 @@ function GridCell({ region, min, max, onClick }: { region: RegionData; min: numb
       }}
     >
       <span className={`text-xs font-bold ${color.text}`}>
-        {region.name}
+        {shortName}
       </span>
       <span className={`text-xs num mt-0.5 ${color.sub}`}>
         {region.avgPricePerPyeong > 0 ? formatPrice(region.avgPricePerPyeong) : '-'}
@@ -83,61 +69,30 @@ function GridCell({ region, min, max, onClick }: { region: RegionData; min: numb
 }
 
 export default function SeoulHeatmap({ regions }: Props) {
-  const regionMap = new Map(regions.map(r => [r.code, r]));
-
-  const seoulRegions = regions.filter(r => r.code.startsWith('11'));
-  const gyeonggiRegions = regions.filter(r => r.code.startsWith('41'));
   const allPrices = regions.filter(r => r.avgPricePerPyeong > 0).map(r => r.avgPricePerPyeong);
   const min = allPrices.length ? Math.min(...allPrices) : 0;
   const max = allPrices.length ? Math.max(...allPrices) : 0;
 
-  const seoulRows = 6;
-  const seoulCols = 6;
-
-  const renderGrid = (grid: Record<string, [number, number]>, rows: number, cols: number) => {
-    const cells: (RegionData | null)[][] = Array.from({ length: rows }, () => Array(cols).fill(null));
-
-    for (const [code, [row, col]] of Object.entries(grid)) {
-      const region = regionMap.get(code);
-      if (region) cells[row][col] = region;
-    }
-
-    return cells.map((row, ri) => (
-      <div key={ri} className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
-        {row.map((cell, ci) => (
-          cell ? (
-            <GridCell
-              key={cell.code}
-              region={cell}
-              min={min}
-              max={max}
-              onClick={() => { window.location.href = `/search?code=${cell.code}`; }}
-            />
-          ) : (
-            <div key={`empty-${ri}-${ci}`} className="min-h-[72px]" />
-          )
-        ))}
-      </div>
-    ));
-  };
+  // 그리드 컬럼 수 (지역 수에 따라 조절)
+  const count = regions.length;
+  const cols = count <= 3 ? count || 1 : count <= 6 ? 3 : count <= 12 ? 4 : count <= 20 ? 5 : 6;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h3 className="font-bold text-gray-900 mb-3">서울 ({seoulRegions.length}개 구)</h3>
-        <div className="space-y-2">
-          {renderGrid(SEOUL_GRID, seoulRows, seoulCols)}
-        </div>
+    <div className="space-y-4">
+      <div
+        className="grid gap-2"
+        style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+      >
+        {regions.map(region => (
+          <GridCell
+            key={region.code}
+            region={region}
+            min={min}
+            max={max}
+            onClick={() => { window.location.href = `/search?code=${region.code}`; }}
+          />
+        ))}
       </div>
-
-      {gyeonggiRegions.length > 0 && (
-        <div>
-          <h3 className="font-bold text-gray-900 mb-3">경기 주요 지역</h3>
-          <div className="space-y-2">
-            {renderGrid(GYEONGGI_GRID, 2, 3)}
-          </div>
-        </div>
-      )}
 
       {/* 범례 */}
       <div className="flex items-center gap-3 text-xs text-gray-500">
