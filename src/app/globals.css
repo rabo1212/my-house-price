@@ -2,63 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Pretendard CDN */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
-:root {
-  --primary: #0F766E;
-  --primary-light: #14B8A6;
-  --accent: #0369A1;
-  --bg: #F0FDFA;
-  --card: #FFFFFF;
-  --text: #134E4A;
-  --text-secondary: #5F7A76;
-  --border: #CCFBF1;
-}
-
 body {
-  color: var(--text);
-  background: var(--bg);
+  color: #1f2937;
+  background: #f9fafb;
   font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #99F6E4; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 
-/* Card style */
 .card {
-  @apply bg-white rounded-2xl border border-teal-100 p-5;
-  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.06);
+  @apply bg-white rounded-2xl border border-gray-200/80 p-5;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Number font */
 .num {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 }
 
-/* Slider styling */
 input[type="range"] {
-  @apply appearance-none h-1.5 rounded-full bg-teal-100 outline-none cursor-pointer;
+  @apply appearance-none h-1.5 rounded-full bg-gray-200 outline-none cursor-pointer;
 }
 input[type="range"]::-webkit-slider-thumb {
-  @apply appearance-none w-4 h-4 rounded-full bg-teal-600 shadow-sm cursor-pointer;
+  @apply appearance-none w-4 h-4 rounded-full bg-indigo-500 shadow-sm cursor-pointer;
   margin-top: -5px;
 }
-input[type="range"]::-webkit-slider-runnable-track {
-  @apply h-1.5 rounded-full;
-}
 
-/* Focus ring */
 *:focus-visible {
-  @apply outline-2 outline-offset-2 outline-teal-500;
+  @apply outline-2 outline-offset-2 outline-indigo-400;
 }
 
-/* Selection */
 ::selection {
-  background: #99F6E4;
-  color: #134E4A;
+  background: #e0e7ff;
+  color: #312e81;
 }

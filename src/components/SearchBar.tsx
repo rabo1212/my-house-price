@@ -40,8 +40,8 @@ export default function SearchBar({ size = 'md' }: { size?: 'md' | 'lg' }) {
 
   return (
     <div ref={ref} className="relative w-full">
-      <div className={`flex items-center bg-white border border-teal-200 rounded-xl focus-within:ring-2 focus-within:ring-teal-400 focus-within:border-teal-400 transition-all duration-200 ${isLg ? 'h-14 text-base px-5 shadow-sm' : 'h-11 text-sm px-4'}`}>
-        <IconSearch className="w-5 h-5 text-teal-400 mr-2.5 flex-shrink-0" />
+      <div className={`flex items-center bg-white border border-gray-200 rounded-xl focus-within:ring-2 focus-within:ring-indigo-300 focus-within:border-indigo-400 transition-all duration-200 ${isLg ? 'h-14 text-base px-5 shadow-sm' : 'h-11 text-sm px-4'}`}>
+        <IconSearch className="w-5 h-5 text-gray-400 mr-2.5 flex-shrink-0" />
         <input
           type="text"
           value={query}
@@ -49,20 +49,20 @@ export default function SearchBar({ size = 'md' }: { size?: 'md' | 'lg' }) {
           onFocus={() => results.length > 0 && setOpen(true)}
           onKeyDown={e => { if (e.key === 'Enter' && results.length) go(results[0].code); }}
           placeholder="지역명 또는 코드로 검색 (예: 강남구, 송파구)"
-          className="flex-1 bg-transparent outline-none placeholder:text-teal-400/60 text-teal-900"
+          className="flex-1 bg-transparent outline-none placeholder:text-gray-400 text-gray-900"
         />
       </div>
       {open && results.length > 0 && (
-        <div className="absolute z-50 top-full mt-1.5 w-full bg-white rounded-xl shadow-lg border border-teal-100 overflow-hidden">
+        <div className="absolute z-50 top-full mt-1.5 w-full bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
           {results.map(r => (
             <button
               key={r.code}
               onClick={() => go(r.code)}
-              className="w-full px-4 py-3 text-left hover:bg-teal-50 flex items-center gap-3 text-sm cursor-pointer transition-colors duration-150"
+              className="w-full px-4 py-3 text-left hover:bg-indigo-50 flex items-center gap-3 text-sm cursor-pointer transition-colors duration-150"
             >
-              <IconMapPin className="w-4 h-4 text-teal-400 flex-shrink-0" />
-              <span className="font-medium text-teal-800">{r.name}</span>
-              <span className="text-xs text-teal-400 num ml-auto">{r.code}</span>
+              <IconMapPin className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+              <span className="font-medium text-gray-800">{r.name}</span>
+              <span className="text-xs text-gray-400 num ml-auto">{r.code}</span>
             </button>
           ))}
         </div>
