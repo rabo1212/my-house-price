@@ -11,13 +11,12 @@ interface Trade {
   floor: number;
 }
 
-export default function PriceChart({ trades }: { trades: Trade[] }) {
+export default function PriceChart({ trades, title = '월별 평균 거래가' }: { trades: Trade[]; title?: string }) {
   if (!trades.length) return null;
 
-  // 날짜별 평균가 계산
   const dateMap = new Map<string, { sum: number; count: number }>();
   for (const t of trades) {
-    const key = t.date.slice(0, 7); // YYYY-MM
+    const key = t.date.slice(0, 7);
     const cur = dateMap.get(key) || { sum: 0, count: 0 };
     cur.sum += t.price;
     cur.count += 1;
@@ -36,17 +35,17 @@ export default function PriceChart({ trades }: { trades: Trade[] }) {
 
   return (
     <div className="card">
-      <h3 className="font-semibold text-slate-700 mb-4">월별 평균 거래가</h3>
+      <h3 className="font-semibold text-teal-900 mb-4">{title}</h3>
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#CCFBF1" />
           <XAxis
             dataKey="month"
-            tick={{ fontSize: 12, fill: '#94A3B8' }}
+            tick={{ fontSize: 12, fill: '#5F7A76' }}
             tickFormatter={v => v.slice(5) + '월'}
           />
           <YAxis
-            tick={{ fontSize: 12, fill: '#94A3B8' }}
+            tick={{ fontSize: 12, fill: '#5F7A76' }}
             tickFormatter={v => formatPrice(v)}
             width={80}
           />
@@ -54,15 +53,15 @@ export default function PriceChart({ trades }: { trades: Trade[] }) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(v: any) => [formatPrice(v as number), '평균가']}
             labelFormatter={l => `${l}`}
-            contentStyle={{ borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '13px' }}
+            contentStyle={{ borderRadius: '12px', border: '1px solid #CCFBF1', fontSize: '13px', color: '#134E4A' }}
           />
           <Line
             type="monotone"
             dataKey="avg"
-            stroke="#2563EB"
+            stroke="#0F766E"
             strokeWidth={2.5}
-            dot={{ fill: '#2563EB', r: 4 }}
-            activeDot={{ r: 6 }}
+            dot={{ fill: '#0F766E', r: 4, strokeWidth: 0 }}
+            activeDot={{ r: 6, fill: '#14B8A6' }}
           />
         </LineChart>
       </ResponsiveContainer>

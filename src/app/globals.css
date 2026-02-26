@@ -2,16 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Pretendard CDN */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
 :root {
-  --primary: #2563EB;
-  --primary-light: #3B82F6;
-  --accent: #10B981;
-  --danger: #EF4444;
-  --bg: #F8FAFC;
+  --primary: #0F766E;
+  --primary-light: #14B8A6;
+  --accent: #0369A1;
+  --bg: #F0FDFA;
   --card: #FFFFFF;
-  --text: #1E293B;
-  --text-secondary: #64748B;
-  --border: #E2E8F0;
+  --text: #134E4A;
+  --text-secondary: #5F7A76;
+  --border: #CCFBF1;
 }
 
 body {
@@ -21,28 +23,42 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Pretendard CDN */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
-
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #99F6E4; border-radius: 3px; }
 
 /* Card style */
 .card {
-  @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-5;
+  @apply bg-white rounded-2xl border border-teal-100 p-5;
+  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.06);
 }
-
-/* Price badge */
-.price-up { @apply text-red-500; }
-.price-down { @apply text-blue-500; }
-
-/* Smooth transitions */
-* { @apply transition-colors duration-150; }
 
 /* Number font */
 .num {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+}
+
+/* Slider styling */
+input[type="range"] {
+  @apply appearance-none h-1.5 rounded-full bg-teal-100 outline-none cursor-pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 rounded-full bg-teal-600 shadow-sm cursor-pointer;
+  margin-top: -5px;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  @apply h-1.5 rounded-full;
+}
+
+/* Focus ring */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-teal-500;
+}
+
+/* Selection */
+::selection {
+  background: #99F6E4;
+  color: #134E4A;
 }

@@ -1,36 +1,39 @@
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import { POPULAR_REGIONS } from '@/lib/region-codes';
+import { IconMapPin, IconCalculator, IconTrendingUp, IconChevronRight } from '@/components/icons';
 
 export default function HomePage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Hero */}
-      <section className="text-center pt-8 pb-4">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">
+      <section className="text-center pt-10 pb-2">
+        <h1 className="text-3xl sm:text-4xl font-bold text-teal-900 mb-3 tracking-tight">
           우리 동네 아파트, 지금 얼마?
         </h1>
-        <p className="text-slate-500 mb-6">
+        <p className="text-teal-600/70 mb-8 text-base">
           국토교통부 실거래가 데이터로 확인하는 진짜 시세
         </p>
-        <div className="max-w-lg mx-auto">
+        <div className="max-w-xl mx-auto">
           <SearchBar size="lg" />
         </div>
       </section>
 
       {/* 인기 지역 */}
       <section>
-        <h2 className="text-lg font-semibold text-slate-700 mb-3">인기 지역</h2>
+        <h2 className="text-lg font-semibold text-teal-900 mb-4">인기 지역</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {POPULAR_REGIONS.map(r => (
             <Link
               key={r.code}
               href={`/search?code=${r.code}`}
-              className="card hover:shadow-md hover:border-blue-200 text-center py-4 group"
+              className="card hover:border-teal-300 hover:shadow-md text-left p-4 group cursor-pointer transition-all duration-200"
             >
-              <div className="text-2xl mb-1">🏙️</div>
-              <div className="font-semibold text-slate-700 group-hover:text-blue-600">{r.name}</div>
-              <div className="text-xs text-slate-400 mt-1 num">{r.code}</div>
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <IconMapPin className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                <span className="font-semibold text-teal-900 group-hover:text-teal-700 transition-colors duration-200">{r.name}</span>
+              </div>
+              <div className="text-xs text-teal-600/50 num pl-6.5">{r.code}</div>
             </Link>
           ))}
         </div>
@@ -38,24 +41,26 @@ export default function HomePage() {
 
       {/* 바로가기 */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Link href="/calculator" className="card hover:shadow-md hover:border-blue-200 flex items-center gap-4 group">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-2xl flex-shrink-0">
-            🧮
+        <Link href="/trend" className="card hover:border-teal-300 hover:shadow-md flex items-center gap-4 group cursor-pointer transition-all duration-200">
+          <div className="w-11 h-11 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0">
+            <IconTrendingUp className="w-5 h-5 text-teal-600" />
           </div>
-          <div>
-            <div className="font-semibold text-slate-700 group-hover:text-blue-600">대출 계산기</div>
-            <div className="text-sm text-slate-500">LTV, 금리, 상환액, 취득세까지 한번에</div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-teal-900 group-hover:text-teal-700 transition-colors duration-200">시세 트렌드</div>
+            <div className="text-sm text-teal-600/60">주요 지역 시세 추이를 한눈에 비교</div>
           </div>
+          <IconChevronRight className="w-4 h-4 text-teal-300 group-hover:text-teal-500 transition-colors duration-200" />
         </Link>
-        <div className="card flex items-center gap-4 opacity-60">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl flex-shrink-0">
-            📊
+        <Link href="/calculator" className="card hover:border-teal-300 hover:shadow-md flex items-center gap-4 group cursor-pointer transition-all duration-200">
+          <div className="w-11 h-11 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+            <IconCalculator className="w-5 h-5 text-sky-600" />
           </div>
-          <div>
-            <div className="font-semibold text-slate-700">시세 트렌드</div>
-            <div className="text-sm text-slate-500">준비중</div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-teal-900 group-hover:text-teal-700 transition-colors duration-200">대출 계산기</div>
+            <div className="text-sm text-teal-600/60">LTV, 금리, 상환액, 취득세까지 한번에</div>
           </div>
-        </div>
+          <IconChevronRight className="w-4 h-4 text-teal-300 group-hover:text-teal-500 transition-colors duration-200" />
+        </Link>
       </section>
     </div>
   );
