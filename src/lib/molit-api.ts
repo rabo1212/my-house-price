@@ -36,9 +36,15 @@ export async function fetchTrades(lawdCd: string, dealYm: string): Promise<Trade
   const url = `${APT_TRADE_URL}?serviceKey=${encodeURIComponent(key)}&LAWD_CD=${lawdCd}&DEAL_YMD=${dealYm}&pageNo=1&numOfRows=500`;
 
   const res = await fetch(url, { next: { revalidate: 3600 } });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    console.error(`[MOLIT] HTTP ${res.status} for ${lawdCd}/${dealYm}`);
+    return [];
+  }
   const text = await res.text();
-  if (!text.includes('<resultCode>000</resultCode>')) return [];
+  if (!text.includes('<resultCode>000</resultCode>')) {
+    console.error(`[MOLIT] API error for ${lawdCd}/${dealYm}:`, text.slice(0, 300));
+    return [];
+  }
 
   return parseXmlItems(text)
     .filter(i => (i['cdealType'] || '').trim() !== 'O')
